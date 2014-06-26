@@ -48,7 +48,12 @@ public class AppCPU extends Orchestrator {
 		SAXParserCPU parser = new SAXParserCPU();
 		Arquivos arquivo = new Arquivos();
 		//System.out.println("Passei por aqui");
-		parser.processar("getCPU", arquivo.getCaminhoBaseDados());
+		java.util.ArrayList lista = parser.processar("getCPU", arquivo.getCaminhoBaseDados());
+		java.util.Iterator itr = lista.iterator();
+		while(itr.hasNext()){
+			Object element = itr.next();
+			System.out.print(element + " ");			
+		}//fim while
 		
 		return null;
 	}

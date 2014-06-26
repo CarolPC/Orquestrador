@@ -17,8 +17,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 
-
-public class SAXParserCPU {
+public class CopyOfSAXParserCPU {
 
 	private String TOKEN_ID="0";
 
@@ -72,19 +71,18 @@ public class SAXParserCPU {
 	boolean ARQUIVO_HOSTS_FIXO=true;
 
 	//Construtor
-	public SAXParserCPU(){
+	public CopyOfSAXParserCPU(){
 
 		//Apenas para testes
 		if(ARQUIVO_HOSTS_FIXO){
 			//Busca pela tag <host ... /> no arquivo XML
 			//
 			//Uso uma lista porque nao sei quantos hosts podem ser retornados
-			Arquivos arquivo = new Arquivos();
-			java.util.ArrayList listaHosts = processar("getCPU", arquivo.CAMINHO_BASE_DADOS); //
+			java.util.ArrayList listaHosts = processar("getCPU", "basedados.xml"); //
 			java.util.Iterator itr = listaHosts.iterator();
 			while(itr.hasNext()){
 				Object element = itr.next();
-				System.out.print(element + " ");			
+				//System.out.print(element + " ");			
 			}//fim while
 		}//fim if
 
@@ -99,7 +97,7 @@ public class SAXParserCPU {
 			javax.xml.parsers.SAXParser parser = parserFactor.newSAXParser();
 			SAXHandler handler = new SAXHandler(tipo);
 			//Apenas para testes			
-			if(ARQUIVO_HOSTS_FIXO){
+			/*if(ARQUIVO_HOSTS_FIXO){
 				System.out.println("[[["+arquivo+"]]]");//Como processar o xml que estah na memoria???
 				parser.parse(new File(arquivo), handler);
 			} else {
@@ -107,15 +105,18 @@ public class SAXParserCPU {
 				InputStream is = new ByteArrayInputStream(arquivo.getBytes());
 				parser.parse(is, handler);
 			}//fim else
-			
+			*/
 			//Printing the list obtained from XML
+			//System.out.println("Passei por aqui");
+			parser.parse(new File(arquivo), handler);
 			for ( Tag doc : handler.docList){
 				System.out.println("passei por aqui");
 				if (tipo.equals("getCPU"))
 					//Armazena apenas os objetos cujo hosts sao do tipo 'compute'
-					if(doc.service.equals("name")){
-						System.out.println(doc.host_name);
-						lista.add(doc.host_name);
+					if(doc.name.equals("name")){
+						//System.out.println(doc.name);
+						System.out.println("passei por aqui");
+						lista.add(doc.name);
 					}//fim if
 
 			}//fim for
@@ -156,48 +157,30 @@ public class SAXParserCPU {
 				String qName, Attributes attributes) 
 						throws SAXException {
 
+			
 			String tipo = getTipo();
 
-			if(tipo.equals("getCPU")){//tag atual. Ex.: <host...>
-				switch(qName){
-				//Cria um novo objeto token quando a tag eh encontrada
-				case "name":
-					doc = new Tag();
-					doc.host_name = attributes.getValue("name");
-					/*doc.expires = attributes.getValue("expires");
-					System.out.println(doc.id.toString());
-					setTokenID(doc.id.toString());*/
+
+
+			
+			if(tipo.equals("getCPU")){
+			
+				switch(qName.toLowerCase()){ //tag atual. Ex.: <host...>
+			
+				case "host":
+					doc = new Tag(); //Cria um novo objeto para guardar o valor
+					doc.name = attributes.getValue("name"); //Ex.: <host ... service="..." .../>
+					//lista.add(doc.name);
+					//System.out.println("\tHOST_NAME:\t" + doc.name);
+					//System.out.println("\tSERVICE:\t" + doc.service);
 					break;
-				case "tenant":
-					doc = new Tag();
-					doc.id = attributes.getValue("id");
-					//doc.name = attributes.getValue("name");
-					System.out.println(doc.id.toString());
-					setTenantID(doc.id.toString());
-					break;
+
 				default:
 					break;
-				}//fimdoSwitch
-			} else
 
-				if(tipo.equals("getHosts")){
+				}//fim do switch
 
-					switch(qName){ //tag atual. Ex.: <host...>
-
-					case "host":
-						doc = new Tag(); //Cria um novo objeto para guardar o valor
-						doc.host_name = attributes.getValue("host_name"); //Ex.: <host ... host_name="..." .../>
-						doc.service = attributes.getValue("service"); //Ex.: <host ... service="..." .../>
-						//System.out.println("\tHOST_NAME:\t" + doc.host_name);
-						//System.out.println("\tSERVICE:\t" + doc.service);
-						break;
-
-					default:
-						break;
-
-					}//fim do switch
-
-				}//fim if
+			}//fim if
 
 		}//fim startElement
 
@@ -209,31 +192,19 @@ public class SAXParserCPU {
 				String qName) throws SAXException {
 
 			String tipo = getTipo();
-			if(tipo.equals("getCPU")){//tag atual. Ex.: <host...>
-				switch(qName){
-				//Cria um novo objeto token quando a tag eh encontrada
-				case "name":
-					docList.add(doc);
-					break;
-				case "tenant":
+
+
+			if(tipo.equals("getCPU")){
+
+				switch(qName){ //tag atual. Ex.: <host...>
+
+				case "host":
 					docList.add(doc);
 					break;
 				default:
 					break;
 				}//fim switch
-			} else
-
-				if(tipo.equals("getHosts")){
-
-					switch(qName){ //tag atual. Ex.: <host...>
-
-					case "host":
-						docList.add(doc);
-						break;
-					default:
-						break;
-					}//fim switch
-				}//fim if
+			}//fim if
 
 		}//fim endElement
 
@@ -261,17 +232,14 @@ public class SAXParserCPU {
 	class Tag {
 
 		String id="";
-		String expires="";
-		String service="";
-		String host_name="";
-		String zone="";
-		String servers="";
+		String name="";
+
 
 	}//fim classe interna
 
 	//Inicia a classe
 	public static void main(String args[]){
-		new SAXParserCPU();
+		new CopyOfSAXParserCPU();
 
 	}//finalMain
 
