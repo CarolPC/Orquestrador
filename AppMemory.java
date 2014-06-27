@@ -3,9 +3,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class AppCPU extends Orchestrator {
+public class AppMemory extends Orchestrator {
 	
-	public AppCPU(){
+	public AppMemory(){
 		String[]b=new String[2];
 
 		lerBaseDados(b);
@@ -19,7 +19,6 @@ public class AppCPU extends Orchestrator {
 		map.put("A",99.5);
 		map.put("B",67.4);
 		map.put("C",67.4);
-		
 		map.put("D",67.3);
 
 		System.out.println("unsorted map: "+map);
@@ -31,7 +30,7 @@ public class AppCPU extends Orchestrator {
 
     public static void main(String[] args) {
     
-    	new AppCPU();
+    	new AppMemory();
     	
 
        
@@ -59,9 +58,8 @@ public class AppCPU extends Orchestrator {
 		return null;
 	}
     */
-	DOMHostParser parser = new DOMHostParser();
+	DOMMemoryParser parser = new DOMMemoryParser();
 	parser.readXML();
-	
 	return null;
    
 }
